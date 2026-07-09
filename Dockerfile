@@ -6,12 +6,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 COPY Gemfile Gemfile.lock ./
 RUN bundle install --jobs 4
+COPY . .
+RUN RAILS_ENV=production SECRET_KEY_BASE=placeholder bundle exec rake assets:precompile
 
 FROM ruby:3.3.11-slim
 ENV RAILS_ENV=production \
     RAILS_LOG_TO_STDOUT=true \
-    RAILS_SERVE_STATIC_FILES=true \
-    SECRET_KEY_BASE=placeholder_key_for_asset_precompilation_only
+    RAILS_SERVE_STATIC_FILES=true
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsqlite3-0 \
@@ -20,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     mkdir -p tmp log storage && \
     chown -R rails:rails tmp log storage
 COPY --from=builder /usr/local/bundle /usr/local/bundle
-COPY --chown=rails:rails . .
+COPY --from=builder --chown=rails:rails /app .
 RUN chown -R rails:rails /app
 EXPOSE 3000
 USER 1001
