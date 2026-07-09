@@ -1,0 +1,9 @@
+/.bundle/
+/vendor/
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+/config/master.key
