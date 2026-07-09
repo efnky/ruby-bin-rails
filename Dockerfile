@@ -10,7 +10,8 @@ RUN bundle install --jobs 4
 FROM ruby:3.3.11-slim
 ENV RAILS_ENV=production \
     RAILS_LOG_TO_STDOUT=true \
-    RAILS_SERVE_STATIC_FILES=true
+    RAILS_SERVE_STATIC_FILES=true \
+    SECRET_KEY_BASE=placeholder_key_for_asset_precompilation_only
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsqlite3-0 \
